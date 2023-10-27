@@ -171,3 +171,15 @@ let rec all_primes x y =
     else
       if is_prime x then x :: all_primes (x + 1) y
       else all_primes (x + 1) y
+
+(* Count the Leaves of a Binary Tree
+   A leaf is a node with no successors. Write a function count_leaves to count them. *)
+
+type 'a tree =
+  | Leaf
+  | Node of 'a * 'a tree * 'a tree
+
+let rec count_leaves = function
+  | Leaf -> 1 (* can be 0 *)
+  | Node(_, Leaf, Leaf) -> 1
+  | Node(_, l, r) -> count_leaves l + count_leaves r
