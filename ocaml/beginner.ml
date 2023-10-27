@@ -175,20 +175,20 @@ let rec all_primes x y =
 (* Count the Leaves of a Binary Tree
    A leaf is a node with no successors. Write a function count_leaves to count them. *)
 type 'a tree =
-  | Leaf
+  | Empty
   | Node of 'a * 'a tree * 'a tree
 
 let rec count_leaves = function
-  | Leaf -> 0
-  | Node(_, Leaf, Leaf) -> 1
+  | Empty -> 0
+  | Node(_, Empty, Empty) -> 1
   | Node(_, l, r) -> count_leaves l + count_leaves r
 
 (* Collect the Leaves of a Binary Tree in a List
    A leaf is a node with no successors. Write a function leaves to collect them in a list. *)
 let collect_leaves tree =
   let rec aux t acc = match t with
-    | Leaf -> acc
-    | Node(v, Leaf, Leaf)-> v :: acc
+    | Empty -> acc
+    | Node(v, Empty, Empty)-> v :: acc
     | Node(_, l, r) -> aux l (aux r acc)
   in aux tree []
 
@@ -196,7 +196,17 @@ let collect_leaves tree =
    An internal node of a binary tree has either one or two non-empty successors. Write a function internals to collect them in a list. *)
 let internals tree =
   let rec aux t acc = match t with
-    | Leaf -> acc
-    | Node(v, Leaf, Leaf) -> acc
+    | Empty -> acc
+    | Node(v, Empty, Empty) -> acc
     | Node(v, l, r) -> aux l (v :: aux r acc)
   in aux tree []
+
+(* Collect the Nodes at a Given Level in a List 
+   A node of a binary tree is at level N if the path from the root to the node has length N-1. The root node is at level 1. Write a function at_level t l to collect all nodes of the tree t at level l in a list. *)
+let at_level tree lvl =
+  let rec aux t acc lvl path = match t with
+    | Empty -> acc
+    | Node(v, l, r) ->
+      if path = lvl - 1 then v :: acc
+      else aux l (aux r acc lvl (path + 1)) lvl (path + 1)
+  in aux tree [] lvl 0
