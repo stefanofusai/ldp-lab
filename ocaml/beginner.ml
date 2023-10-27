@@ -210,3 +210,17 @@ let at_level tree lvl =
       if path = lvl - 1 then v :: acc
       else aux l (aux r acc lvl (path + 1)) lvl (path + 1)
   in aux tree [] lvl 0
+
+(* Count the Nodes of a Multiway Tree *)
+type 'a multiway_tree =
+  | Empty
+  | Node of 'a * 'a multiway_tree list
+
+let count_nodes tree =
+  let rec count_tree = function
+    | Empty -> 0
+    | Node(_, l) -> 1 + count_list_of_nodes l
+  and count_list_of_nodes = function
+    | [] -> 0
+    | h :: t -> count_tree h + count_list_of_nodes t
+  in count_tree tree
