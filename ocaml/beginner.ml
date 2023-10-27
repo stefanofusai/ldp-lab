@@ -155,3 +155,19 @@ let coprime x y =
       else gcd y (x mod y)
   in (gcd x y) = 1
 
+(* A List of Prime Numbers
+   Given a range of integers by its lower and upper limit, construct a list of all prime numbers in that range. *)
+let rec all_primes x y =
+  let is_prime x =
+    if x < 2 then false
+    else if x = 2 then true
+    else
+      let rec aux n =
+        if n * n > x then true
+        else x mod n <> 0 && aux (n + 1)
+      in aux 2
+  in
+  if x = y then []
+    else
+      if is_prime x then x :: all_primes (x + 1) y
+      else all_primes (x + 1) y
