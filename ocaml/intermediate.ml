@@ -22,3 +22,15 @@ let rec compress = function
   | a :: (b :: _ as t) ->
     if a = b then compress t
     else a :: compress t
+
+(* Pack Consecutive Duplicates 
+   Pack consecutive duplicates of list elements into sublists. *)
+
+let pack lst =
+  let rec aux acc curr = function
+    | [] -> [] (* only reachable when input list is empty *)
+    | [x] -> (x :: curr) :: acc
+    | a :: (b :: _ as t) ->
+      if a = b then aux acc (a :: curr) t
+      else aux ((a :: curr) :: acc) [] t
+  in List.rev (aux [] [] lst)
