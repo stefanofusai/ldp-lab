@@ -186,8 +186,17 @@ let rec count_leaves = function
 (* Collect the Leaves of a Binary Tree in a List
    A leaf is a node with no successors. Write a function leaves to collect them in a list. *)
 let collect_leaves tree =
-  let rec aux acc = function
-    | Leaf -> []
-    | Node(n, Leaf, Leaf)-> n :: acc
-    | Node(_, l, r) -> aux acc l @ aux acc r
-in aux [] tree
+  let rec aux t acc = match t with
+    | Leaf -> acc
+    | Node(v, Leaf, Leaf)-> v :: acc
+    | Node(_, l, r) -> aux l (aux r acc)
+  in aux tree []
+
+(* Collect the Internal Nodes of a Binary Tree in a List
+   An internal node of a binary tree has either one or two non-empty successors. Write a function internals to collect them in a list. *)
+let internals tree =
+  let rec aux t acc = match t with
+    | Leaf -> acc
+    | Node(v, Leaf, Leaf) -> acc
+    | Node(v, l, r) -> aux l (v :: aux r acc)
+  in aux tree []
