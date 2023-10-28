@@ -73,3 +73,16 @@ let drop lst n =
       if i > 1 then h :: aux (i - 1) t
       else aux n t
   in aux n lst
+
+(* Extract a Slice From a List 
+   Given two indices, i and k, the slice is the list containing the elements between the i'th and k'th element of the original list (both limits included). Start counting the elements with 0 (this is the way the List module numbers elements). *)
+
+let slice lst x y =
+  let rec aux _x _y = function
+    | [] -> []
+    | h :: t ->
+      if _x > 0 then aux (_x - 1) (_y - 1) t
+      else
+        if _y > -1 then h :: aux (_x - 1) (_y - 1) t
+        else []
+  in aux x y lst
