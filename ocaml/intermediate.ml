@@ -34,3 +34,20 @@ let pack lst =
       if a = b then aux acc (a :: curr) t
       else aux ((a :: curr) :: acc) [] t
   in List.rev (aux [] [] lst)
+
+(* Decode a Run-Length Encoded List
+   Given a run-length code list generated as specified in the previous problem, construct its uncompressed version. *)
+  
+type rl_code =
+  | One of string
+  | Many of int * string
+
+let rec decode lst =
+  let rec extract code = match code with
+    | One(v) -> [v]
+    | Many(i, v) ->
+      if i > 1 then v :: extract (Many(i-1, v))
+      else [v]
+  in match lst with
+    | [] -> []
+    | h :: t -> extract h :: decode t
