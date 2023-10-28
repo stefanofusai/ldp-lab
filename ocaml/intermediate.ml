@@ -51,3 +51,14 @@ let rec decode lst =
   in match lst with
     | [] -> []
     | h :: t -> extract h :: decode t
+
+(* Replicate the Elements of a List a Given Number of Times 
+   Replicate the elements of a list a given number of times. *)
+
+let replicate lst n =
+  let rec aux i = function
+    | [] -> []
+    | (h :: t) as l ->
+      if i > 0 then h :: aux (i - 1) l
+      else aux n t
+  in aux n lst
