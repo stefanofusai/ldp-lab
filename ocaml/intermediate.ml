@@ -62,3 +62,14 @@ let replicate lst n =
       if i > 0 then h :: aux (i - 1) l
       else aux n t
   in aux n lst
+
+(* Drop Every N'th Element From a List 
+   Drop every N'th element from a list. *)
+
+let drop lst n =
+  let rec aux i = function
+    | [] -> []
+    | h :: t -> 
+      if i > 1 then h :: aux (i - 1) t
+      else aux n t
+  in aux n lst
