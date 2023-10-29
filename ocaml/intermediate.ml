@@ -86,3 +86,14 @@ let slice lst x y =
         if _y > -1 then h :: aux (_x - 1) (_y - 1) t
         else []
   in aux x y lst
+
+(* Rotate a List N Places to the Left 
+   Rotate a list N places to the left. *)
+
+let rotate lst n =
+  let rec aux acc i = function
+    | []     -> []
+    | h :: t ->
+      if i > 1 then aux (h :: acc) (i - 1) t
+      else t @ List.rev (h :: acc)
+  in aux [] n lst
