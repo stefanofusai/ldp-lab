@@ -97,3 +97,25 @@ let rotate lst n =
       if i > 1 then aux (h :: acc) (i - 1) t
       else t @ List.rev (h :: acc)
   in aux [] n lst
+
+(* Extract a Given Number of Randomly Selected Elements From a List 
+   The selected items shall be returned in a list. We use the Random module but and initialise it with Random.init 0 at the start of the function for reproducibility and validate the solution. To make the function truly random, however, one should remove the call to Random.init 0 *)
+
+let rand_select lst n =
+  let random_n_of_list l = List.length l |> Random.int
+  in let rec remove_elem_from_list x = function
+    | []     -> []
+    | h :: t ->
+      if h = x then t
+      else h :: remove_elem_from_list x t
+  in let random_elem_of_list l =
+    let i = random_n_of_list l in
+      let picked = List.nth l i in 
+        (picked, remove_elem_from_list picked l)
+  in let rec aux counter = function
+    | [] -> []
+    | l0 ->
+      let elem, l1 = random_elem_of_list l0 in
+        if counter > 0 then elem :: aux (counter - 1) l1
+        else []
+  in aux n lst
