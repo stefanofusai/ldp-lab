@@ -7,7 +7,7 @@
     A function transpose that transposes a generic matrix independently of its size and content.
     The basics operators + and * that adds and multiplies two matrices non necessarily squared. *)
 
-module type Matrix = sig
+module type MatrixADT = sig
     type matrix
     val zeroes: int -> int -> matrix
     val identity: int -> int -> matrix
