@@ -1,5 +1,5 @@
 -module(helloworld).
--export([run/0]).
+-export([start/0]).
 
-run() ->
+start() ->
     io:format("Hello world!\n").
