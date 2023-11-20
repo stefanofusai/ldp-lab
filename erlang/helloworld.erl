@@ -2,4 +2,4 @@
 -export([run/0]).
 
 run() ->
-    io:format("Hello world!\n"). 
+    io:format("Hello world!\n").
