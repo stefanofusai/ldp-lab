@@ -1,35 +1,29 @@
--module(es3).
--export([init/0, start/3]).
+-module(es3_cp).
+-export([init/2, start/3]).
 
-init() ->
+init(N, C) ->
     receive
         {From, set_pid_next, PidNext} ->
-            io:format("[~p] (caller: ~p) set_pid_next: ~p~n", [self(), From, PidNext]),
+            io:format("[~p] I am the ~p/~p child process, created by ~p and linked to ~p~n", [
+                self(), C, N, From, PidNext
+            ]),
             loop(PidNext)
     end.
 loop(PidNext) ->
     receive
-        {From, send_message, Message, MMax} ->
-            io:format("[~p] (caller: ~p) send_message to ~p (1/~p messages sent): ~p~n", [
-                self(), From, PidNext, MMax, Message
-            ]),
-            PidNext ! {self(), send_message, Message, MMax, 1},
-            loop(PidNext);
         {From, send_message, Message, MMax, MCount} when MCount =< MMax ->
-            io:format("[~p] (caller: ~p) send_message to ~p (~p/~p messages sent): ~p~n", [
-                self(), From, PidNext, MCount, MMax, Message
+            io:format("[~p] Received 'send_message' signal from ~p (~p/~p): sending ~p to ~p~n", [
+                self(), From, MCount, MMax, Message, PidNext
             ]),
             PidNext ! {self(), send_message, Message, MMax, MCount + 1},
             loop(PidNext);
-        {From, send_message, Message, MMax, MCount} ->
-            io:format(
-                "[~p] (caller: ~p) send_message to ~p refused (~p/~p messages sent): ~p~n", [
-                    self(), From, PidNext, MCount, MMax, Message
-                ]
-            ),
+        {From, send_message, _, MMax, MCount} ->
+            io:format("[~p] Received 'send_message' signal from ~p (~p/~p): ignoring signal~n", [
+                self(), From, MCount, MMax
+            ]),
             loop(PidNext);
         {From, quit} ->
-            io:format("[~p] (caller: ~p) quit~n", [self(), From]),
+            io:format("[~p] Received 'quit' signal from ~p: quitting~n", [self(), From]),
             PidNext ! {self(), quit}
     end.
 
@@ -40,12 +34,13 @@ set_pids_next(PidFirst, [Pid | T = [PidNext | _]]) ->
     set_pids_next(PidFirst, T).
 
 start(M, N, Message) ->
-    Pids = [spawn(?MODULE, init, []) || _ <- lists:seq(1, N)],
+    io:format("[Main] Spawning processes...~n"),
+    Pids = [spawn(?MODULE, init, [N, C]) || C <- lists:seq(1, N)],
     PidFirst = hd(Pids),
     set_pids_next(PidFirst, Pids),
-    io:format("[~p] Sleeping for 5000ms before starting ring...~n", [self()]),
+    io:format("[Main] Sending 'send_message' signal in 5000ms...~n"),
     timer:sleep(5000),
-    PidFirst ! {self(), send_message, Message, M},
-    io:format("[~p] Sleeping for 5000ms before closing ring...~n", [self()]),
+    PidFirst ! {self(), send_message, Message, M, 1},
+    io:format("[Main] Sending 'quit' signal in 5000ms...~n"),
     timer:sleep(5000),
     PidFirst ! {self(), quit}.
