@@ -23,7 +23,7 @@ loop(PidNext) ->
             loop(PidNext);
         {From, send_message, Message, MMax, MCount} ->
             io:format(
-                "[~p] (caller: ~p) send_message to ~p refused (~p/~p messages sent)): ~p~n", [
+                "[~p] (caller: ~p) send_message to ~p refused (~p/~p messages sent): ~p~n", [
                     self(), From, PidNext, MCount, MMax, Message
                 ]
             ),
