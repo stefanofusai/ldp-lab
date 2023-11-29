@@ -1,4 +1,4 @@
--module(es3_ssp).
+-module(ssp).
 -export([init/3, init/4, start/3]).
 
 init(M, N, C) ->

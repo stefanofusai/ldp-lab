@@ -1,4 +1,4 @@
--module(es3_cp).
+-module(cp).
 -export([init/2, start/3]).
 
 init(N, C) ->
