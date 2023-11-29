@@ -1,12 +1,6 @@
 -module(client).
 -export([start/0]).
 
-run() ->
-    case whereis(server) of
-        undefined -> error("the server hasn't been started yet");
-        _ -> loop()
-    end.
-
 loop() ->
     Server = whereis(server),
     Server !
@@ -25,17 +19,15 @@ loop() ->
     end.
 
 start() ->
-    Server = spawn(fun server:loop/0),
-    link(Server),
-    try register(server, Server) of
-        _ -> Server ! {print, "Successfully registered server"}
-    catch
-        error:badarg -> Server ! {print, "Server is already registered"}
-    after
-        Server !
-            {print, lists:flatten(io_lib:format("Established connection with client ~p", [self()]))}
+    case whereis(server) of
+        undefined ->
+            Server = spawn(fun server:loop/0),
+            register(server, Server),
+            Server ! {print, "Spawned and registered server"};
+        Server ->
+            Server ! {print, "Connected to existing server"}
     end,
-    run().
+    loop().
 
 stop() ->
     exit(suicide),
