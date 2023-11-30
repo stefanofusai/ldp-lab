@@ -1,13 +1,23 @@
 -module(mm).
--export([init/2]).
+-export([start/1]).
 
-init(Me, Server) ->
+start(Name) ->
+    global:register_name(Name, self()),
     group_leader(whereis(user), self()),
-    io:format("~p started~n", [Me]),
-    loop(Me, Server).
+    io:format("[~p] Started @ ~p~n", [Name, self()]),
+    loop(Name).
 
-loop(Me, Server) ->
+loop(Name) ->
+    Server = global:whereis_name(server),
     receive
-        Any -> io:format("[~p] forwarding ~p~n", [Me, Any]),
-               Server ! {Me, Any}, loop(Me, Server)
-    end.
+        List when is_list(List) ->
+            io:format("[~p] Got list ~p from client~n", [Name, List]),
+            lists:foreach(
+                fun(Elem) ->
+                    io:format("[~p] Sending element ~p to server~n", [Name, Elem]),
+                    Server ! {from, self(), element, Elem}
+                end,
+                List
+            )
+    end,
+    loop(Name).
