@@ -9,7 +9,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 ## Getting the Name of the Current Node
 
-- **Command**: `node()`
+- **Command**: `Node = node()`
 - **Description**: Retrieve the name of the current node.
 
 ## Loading a Module on All Nodes
@@ -34,7 +34,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 ## Retrieving a Process PID by Name Globally
 
-- **Command**: `global:whereis_name(name)`
+- **Command**: `Pid = global:whereis_name(name)`
 - **Description**: Retrieve a process's PID using its name from the global scope. This is useful for communicating with processes across different nodes.
 
 ## Setting a Process as a System Process
