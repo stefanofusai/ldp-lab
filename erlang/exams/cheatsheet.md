@@ -46,3 +46,8 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 - **Command**: `global:whereis_name(name)`
 - **Description**: Retrieve a process's PID using its name from the global scope. This is useful for communicating with processes across different nodes.
+
+## Setting a Process as a System Process
+
+- **Command**: `process_flag(trap_exit, true)`
+- **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating.
