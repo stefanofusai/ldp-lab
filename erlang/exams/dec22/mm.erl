@@ -10,14 +10,19 @@ start(Name) ->
 loop(Name) ->
     Server = global:whereis_name(server),
     receive
-        List when is_list(List) ->
-            io:format("[~p] Got list ~p from client~n", [Name, List]),
+        {from, From, forward_list, List} when is_list(List) ->
+            io:format("[~p] Got list ~p from ~p~n", [Name, List, From]),
             lists:foreach(
                 fun(Elem) ->
-                    io:format("[~p] Sending element ~p to server~n", [Name, Elem]),
+                    io:format("[~p] Sending element ~p to server~p~n", [Name, Elem, Server]),
                     Server ! {from, self(), element, Elem}
                 end,
                 List
-            )
-    end,
-    loop(Name).
+            ),
+            loop(Name);
+        {from, From, stop, Reason} ->
+            io:format("[~p] Received stop signal ~p from ~p~n", [Name, Reason, From]);
+        Other ->
+            io:format("[server] Received unknown message ~p~n", [Other]),
+            loop(Name)
+    end.
