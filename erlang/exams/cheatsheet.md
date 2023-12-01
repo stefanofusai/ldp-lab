@@ -2,21 +2,6 @@
 
 This cheat sheet provides a quick reference to common Erlang commands and functions used for distributed computing and process management.
 
-## Starting an Erlang Shell on a Node
-
-- **Command**: `erl -sname nodename`
-- **Description**: Start an Erlang shell on a given node. Note that the client shell must also be started with the `-sname` flag, or the nodes won't be visible to it.
-
-## Pinging a Node
-
-- **Command**: `net_adm:ping(nodename)`
-- **Description**: Ping the given node to make it visible to the client.
-
-## Loading a Module on All Nodes
-
-- **Command**: `nl(modulename)`
-- **Description**: Load the given module on all nodes in the distributed system.
-
 ## Getting the Hostname of the Local Machine
 
 - **Command**: `{ok, HostName} = inet:gethostname()`
@@ -27,10 +12,15 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `node()`
 - **Description**: Retrieve the name of the current node.
 
-## Spawning a Process on a Given Node
+## Loading a Module on All Nodes
 
-- **Command**: `Pid = spawn(list_to_atom("nodename@" ++ HostName), module, function, [args])`
-- **Description**: Spawn a given `module:function` on a specified node. The node is determined by combining the nodename with the HostName.
+- **Command**: `nl(modulename)`
+- **Description**: Load the given module on all nodes in the distributed system.
+
+## Pinging a Node
+
+- **Command**: `net_adm:ping(nodename)`
+- **Description**: Ping the given node to make it visible to the client.
 
 ## Redirecting io:format Output to the Node's Shell
 
@@ -51,3 +41,13 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 - **Command**: `process_flag(trap_exit, true)`
 - **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating.
+
+## Spawning a Process on a Given Node
+
+- **Command**: `Pid = spawn(list_to_atom("nodename@" ++ HostName), module, function, [args])`
+- **Description**: Spawn a given `module:function` on a specified node. The node is determined by combining the nodename with the HostName.
+
+## Starting an Erlang Shell on a Node
+
+- **Command**: `erl -sname nodename`
+- **Description**: Start an Erlang shell on a given node. Note that the client shell must also be started with the `-sname` flag, or the nodes won't be visible to it.
