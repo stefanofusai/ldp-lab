@@ -23,7 +23,7 @@ loop(Name, StartIndex) ->
     Server = global:whereis_name(server),
     case is_pid(Server) of
         true -> ok;
-        false -> error("[~p] Pid not found for `server`~n", [Name])
+        false -> error(lists:flatten(io_lib:format("[~p] Pid not found for `server`", [Name])))
     end,
     receive
         {from, From, {forward_list, List, original_length, OriginalLength}} when is_list(List) ->

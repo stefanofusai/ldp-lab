@@ -45,5 +45,5 @@ rpc(To, Msg) ->
     Pid = global:whereis_name(To),
     case is_pid(Pid) of
         true -> Pid ! {from, self(), Msg};
-        false -> io:format("[client] Pid not found for `~p`~n", [To])
+        false -> error(lists:flatten(io_lib:format("[client] Pid not found for `~p`", [To])))
     end.
