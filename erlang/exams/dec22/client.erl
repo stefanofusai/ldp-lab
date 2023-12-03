@@ -19,7 +19,8 @@ close() ->
     rpc(server, {stop, shutdown}),
     rpc(mm1, {stop, shutdown}),
     rpc(mm2, {stop, shutdown}),
-    io:format("[client] Successfully shut down processes on ~p nodes~n", [length(nodes())]).
+    io:format("[client] Successfully shut down processes on ~p nodes~n", [length(nodes())]),
+    ok.
 
 do_reverse(List) ->
     ListLength = length(List),
@@ -37,7 +38,8 @@ do_reverse(List) ->
     end,
     rpc(mm2, {set_start_index, StartIndex2}),
     rpc(mm1, {forward_list, List1, original_length, OriginalLength}),
-    rpc(mm2, {forward_list, List2, original_length, OriginalLength}).
+    rpc(mm2, {forward_list, List2, original_length, OriginalLength}),
+    ok.
 
 % Private functions
 
