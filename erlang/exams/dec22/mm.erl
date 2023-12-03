@@ -23,7 +23,7 @@ loop(Name, StartIndex) ->
     Server = global:whereis_name(server),
     case is_pid(Server) of
         true -> ok;
-        false -> exit("[~p] Pid not found for `server`~n", [Name])
+        false -> error("[~p] Pid not found for `server`~n", [Name])
     end,
     receive
         {from, From, {forward_list, List, original_length, OriginalLength}} when is_list(List) ->
