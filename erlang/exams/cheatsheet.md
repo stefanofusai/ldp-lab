@@ -76,3 +76,8 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 - **Command**: `erl -sname nodename`
 - **Description**: Start an Erlang shell on a given node. Note that the client shell must also be started with the `-sname` flag, or the nodes won't be visible to it.
+
+## Unlinking a Process
+
+- **Command**: `unlink(Pid)`
+- **Description**: Unlink the client process from the given process. This allows the client process to no longer receive an exit signal if the linked process terminates.
