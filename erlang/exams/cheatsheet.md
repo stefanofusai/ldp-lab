@@ -7,6 +7,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `{ok, HostName} = inet:gethostname()`
 - **Description**: Retrieve the hostname of the local machine.
 
+## Getting a List of All Nodes in the Distributed System
+
+- **Command**: `nodes()`
+- **Description**: Retrieve a list of all nodes in the distributed system.
+
 ## Getting the Name of the Current Node
 
 - **Command**: `Node = node()`
