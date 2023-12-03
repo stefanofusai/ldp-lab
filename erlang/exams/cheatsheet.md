@@ -2,6 +2,11 @@
 
 This cheat sheet provides a quick reference to common Erlang commands and functions used for distributed computing and process management.
 
+## Define a Macro
+
+- **Command**: `-define(Macro, Value).`
+- **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(sum(X, Y), X + Y).`
+
 ## Getting the Hostname of the Local Machine
 
 - **Command**: `{ok, HostName} = inet:gethostname()`
