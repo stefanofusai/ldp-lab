@@ -5,7 +5,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 ## Define a Macro
 
 - **Command**: `-define(Macro, Value).`
-- **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(sum(X, Y), X + Y).`
+- **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(SUM(X, Y), X + Y).`; to use the macro, call `?SUM(1, 2)`.
 
 ## Getting the Hostname of the Local Machine
 
