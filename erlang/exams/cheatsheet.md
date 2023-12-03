@@ -17,6 +17,16 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `Node = node()`
 - **Description**: Retrieve the name of the current node.
 
+## Handling an Exit Signal
+
+- **Command**: `receive {'EXIT', Pid, Reason} -> ... end`
+- **Description**: Handle an exit signal from a process. The `Pid` is the PID of the process that exited, and the `Reason` is the exit reason. Note that the process must be set as a system process to receive the exit signal of a linked process without terminating.
+
+## Handling Exceptions
+
+- **Command**: `try ... catch [error:Reason | exit:Reason | throw:Reason] -> ... end`
+- **Description**: Handle an exception. The `Reason` is the exception reason. Note that the catch clause behaves like a pattern match, so it can be used to handle different types of exceptions.
+
 ## Loading a Module on All Nodes
 
 - **Command**: `nl(modulename)`
@@ -26,6 +36,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 - **Command**: `net_adm:ping(nodename)`
 - **Description**: Ping the given node to make it visible to the client.
+
+## Raise an Exit Signal
+
+- **Command**: `exit(Pid, Reason)`
+- **Description**: Raise an exit signal to the given process with the given reason.
 
 ## Redirecting io:format Output to the Node's Shell
 
@@ -51,6 +66,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 - **Command**: `Pid = spawn(list_to_atom("nodename@" ++ HostName), module, function, [args])`
 - **Description**: Spawn a given `module:function` on a specified node. The node is determined by combining the nodename with the HostName.
+
+## Spawning a Process and Linking to It
+
+- **Command**: `Pid = spawn_link(module, function, [args])`
+- **Description**: Spawn a given `module:function` and link to it. This allows the client process to receive an exit signal if the spawned process terminates. Note that the spawned process must be set as a system process to handle the exit signal without terminating.
 
 ## Starting an Erlang Shell on a Node
 
