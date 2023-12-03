@@ -40,7 +40,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 ## Loading a Module on All Nodes
 
 - **Command**: `nl(modulename)`
-- **Description**: Load the given module on all nodes in the distributed system.
+- **Description**: Load the given module on all nodes in the distributed system. Note: the module must be compiled first using `c(modulename)`.
 
 ## Pinging a Node
 
