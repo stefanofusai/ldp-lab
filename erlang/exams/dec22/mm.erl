@@ -9,17 +9,17 @@ start(Name) ->
 
 loop(Name) ->
     receive
-        {from, From, {set_index, Index}} ->
-            io:format("[~p] Received set_index signal with index `~p` from client @ ~p~n", [
-                Name, Index, From
+        {from, From, {set_start_index, StartIndex}} ->
+            io:format("[~p] Received set_start_index signal with index `~p` from client @ ~p~n", [
+                Name, StartIndex, From
             ]),
-            loop(Name, Index);
+            loop(Name, StartIndex);
         Other ->
             io:format("[~p] Received unknown message: `~p`~n", [Name, Other]),
             loop(Name)
     end.
 
-loop(Name, Index) ->
+loop(Name, StartIndex) ->
     Server = global:whereis_name(server),
     case is_pid(Server) of
         true -> ok;
@@ -33,15 +33,15 @@ loop(Name, Index) ->
                     io:format("[~p] Sending element `~p` to server @ ~p~n", [Name, Elem, Server]),
                     Server !
                         {from, self(),
-                            {element, {Index + ElemIndex - 1, Elem}, original_length,
+                            {element, {StartIndex + ElemIndex, Elem}, original_length,
                                 OriginalLength}}
                 end,
                 lists:enumerate(List)
             ),
-            loop(Name, Index);
+            loop(Name, StartIndex);
         {from, From, {stop, Reason}} ->
             io:format("[~p] Received stop signal with reason `~p` from ~p~n", [Name, Reason, From]);
         Other ->
             io:format("[~p] Received unknown message: `~p`~n", [Name, Other]),
-            loop(Name, Index)
+            loop(Name, StartIndex)
     end.

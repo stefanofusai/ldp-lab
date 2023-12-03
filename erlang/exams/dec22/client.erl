@@ -24,18 +24,18 @@ close() ->
 do_reverse(List) ->
     ListLength = length(List),
     {List1Temp, List2} = lists:split(ListLength div 2, List),
-    rpc(mm1, {set_index, 1}),
+    rpc(mm1, {set_start_index, 1}),
     case ListLength rem 2 of
         0 ->
             List1 = List1Temp,
-            Index2 = ListLength div 2 + 1,
+            StartIndex2 = ListLength div 2,
             OriginalLength = ListLength;
         1 ->
             List1 = List1Temp ++ [hd(List2)],
-            Index2 = ListLength div 2 + 2,
+            StartIndex2 = ListLength div 2 + 1,
             OriginalLength = ListLength + 1
     end,
-    rpc(mm2, {set_index, Index2}),
+    rpc(mm2, {set_start_index, StartIndex2}),
     rpc(mm1, {forward_list, List1, original_length, OriginalLength}),
     rpc(mm2, {forward_list, List2, original_length, OriginalLength}).
 
