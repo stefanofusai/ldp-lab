@@ -15,19 +15,35 @@ start() ->
     ok.
 
 close() ->
-    io:format("[client] Shutting down processes on ~p nodes~n...", [length(nodes())]),
+    io:format("[client] Shutting down processes on ~p nodes...~n", [length(nodes())]),
     rpc(server, {stop, shutdown}),
     rpc(mm1, {stop, shutdown}),
     rpc(mm2, {stop, shutdown}),
     io:format("[client] Successfully shut down processes on ~p nodes~n", [length(nodes())]).
 
-% TODO
 do_reverse(List) ->
-    rpc(mm1, {forward_list, List}),
-    rpc(mm2, {forward_list, List}).
+    ListLength = length(List),
+    {List1Temp, List2} = lists:split(ListLength div 2, List),
+    rpc(mm1, {set_index, 1}),
+    case ListLength rem 2 of
+        0 ->
+            List1 = List1Temp,
+            Index2 = ListLength div 2 + 1,
+            OriginalLength = ListLength;
+        1 ->
+            List1 = List1Temp ++ [hd(List2)],
+            Index2 = ListLength div 2 + 2,
+            OriginalLength = ListLength + 1
+    end,
+    rpc(mm2, {set_index, Index2}),
+    rpc(mm1, {forward_list, List1, original_length, OriginalLength}),
+    rpc(mm2, {forward_list, List2, original_length, OriginalLength}).
 
 % Private functions
 
 rpc(To, Msg) ->
-    {MsgCode, MsgContent} = Msg,
-    global:whereis_name(To) ! {from, self(), MsgCode, MsgContent}.
+    Pid = global:whereis_name(To),
+    case is_pid(Pid) of
+        true -> Pid ! {from, self(), Msg};
+        false -> io:format("[client] Pid not found for `~p`~n", [To])
+    end.
