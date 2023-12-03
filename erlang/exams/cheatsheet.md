@@ -12,6 +12,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `nodes()`
 - **Description**: Retrieve a list of all nodes in the distributed system.
 
+## Getting a List of All Registered Processes Globally
+
+- **Command**: `global:registered_names()`
+- **Description**: Retrieve a list of all registered processes in the global scope.
+
 ## Getting the Name of the Current Node
 
 - **Command**: `Node = node()`
