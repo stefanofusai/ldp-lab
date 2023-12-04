@@ -75,7 +75,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 ## Setting a Process as a System Process
 
 - **Command**: `process_flag(trap_exit, true)`
-- **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating.
+- **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating as it receives the signal in its mailbox. The signal can be handled using `receive {'EXIT', Pid, Reason} -> ... end`.
 
 ## Spawning a Process on a Given Node
 
