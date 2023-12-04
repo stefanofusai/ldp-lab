@@ -9,7 +9,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 
 ## Define a Macro
 
-- **Command**: `-define(Macro, Value).`
+- **Command**: `-define(Macro, Value)`
 - **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(SUM(X, Y), X + Y).`; to use the macro, call `?SUM(1, 2)`.
 
 ## Getting the Hostname of the Local Machine
@@ -87,7 +87,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
   - I don't care if a process I create crashes: `Pid = spawn(fun()-> ... end)`.
   - I want to die if a process I create crashes: `Pid = spawn_link(fun()-> ... end)`.
   - I want to handle errors if a process I create crashes:
-  `process_flag(trap_exits, true), Pid = spawn_link(fun()-> ... end).`
+  `process_flag(trap_exits, true), Pid = spawn_link(fun()-> ... end)`
 
 ## Spawning a Process on a Given Node
 
