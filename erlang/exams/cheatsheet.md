@@ -2,6 +2,11 @@
 
 This cheat sheet provides a quick reference to common Erlang commands and functions used for distributed computing and process management.
 
+## Checking if a Process is Alive
+
+- **Command**: `is_process_alive(Pid)`
+- **Description**: Check if the given process is alive.
+
 ## Define a Macro
 
 - **Command**: `-define(Macro, Value).`
