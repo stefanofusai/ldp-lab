@@ -12,6 +12,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `-define(Macro, Value)`
 - **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(SUM(X, Y), X + Y).`; to use the macro, call `?SUM(1, 2)`.
 
+## Demonitoring a Process
+
+- **Command**: `demonitor(Ref)`
+- **Description**: Demonitor the given process. The `Ref` is the reference returned by `erlang:monitor`.
+
 ## Getting the Hostname of the Local Machine
 
 - **Command**: `{ok, HostName} = inet:gethostname()`
