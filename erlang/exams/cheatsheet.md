@@ -77,6 +77,13 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `process_flag(trap_exit, true)`
 - **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating as it receives the signal in its mailbox. The signal can be handled using `receive {'EXIT', Pid, Reason} -> ... end`.
 
+    Examples:
+
+  - I don't care if a process I create crashes: `Pid = spawn(fun()-> ... end)`.
+  - I want to die if a process I create crashes: `Pid = spawn_link(fun()-> ... end)`.
+  - I want to handle errors if a process I create crashes:
+  `process_flag(trap_exits, true), Pid = spawn_link(fun()-> ... end).`
+
 ## Spawning a Process on a Given Node
 
 - **Command**: `Pid = spawn(list_to_atom("nodename@" ++ HostName), module, function, [args])`
