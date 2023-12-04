@@ -2,7 +2,6 @@
 -export([start/1]).
 
 start(Name) ->
-    global:register_name(Name, self()),
     group_leader(whereis(user), self()),
     io:format("[~p] Started @ ~p~n", [Name, self()]),
     loop(Name).

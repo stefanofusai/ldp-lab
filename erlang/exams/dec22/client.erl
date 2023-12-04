@@ -6,10 +6,13 @@
 start() ->
     {ok, HostName} = inet:gethostname(),
     Server = spawn(list_to_atom("server@" ++ HostName), server, start, []),
+    global:register_name(server, Server),
     io:format("[client] Initialized server @ ~p~n", [Server]),
     MM1 = spawn(list_to_atom("mm1@" ++ HostName), mm, start, [mm1]),
+    global:register_name(mm1, MM1),
     io:format("[client] Initialized mm1 @ ~p~n", [MM1]),
     MM2 = spawn(list_to_atom("mm2@" ++ HostName), mm, start, [mm2]),
+    global:register_name(mm2, MM2),
     io:format("[client] Initialized mm2 @ ~p~n", [MM2]),
     io:format("[client] Startup successful on ~p nodes~n", [length(nodes())]),
     ok.
@@ -17,8 +20,11 @@ start() ->
 close() ->
     io:format("[client] Shutting down processes on ~p nodes...~n", [length(nodes())]),
     rpc(server, {stop, shutdown}),
+    global:unregister_name(server),
     rpc(mm1, {stop, shutdown}),
+    global:unregister_name(mm1),
     rpc(mm2, {stop, shutdown}),
+    global:unregister_name(mm2),
     io:format("[client] Successfully shut down processes on ~p nodes~n", [length(nodes())]),
     ok.
 
