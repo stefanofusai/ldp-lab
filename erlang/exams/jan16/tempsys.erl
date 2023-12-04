@@ -32,20 +32,28 @@ startsys() ->
     },
     {{_, ConvertersFrom}, {_, ConvertersTo}} = Converters,
     lists:foreach(
-        fun({symbol, Symbol, convert_fun, ConvertFun}) ->
-            register(
-                list_to_atom("From" ++ atom_to_list(Symbol)),
-                spawn(fun() -> loop(ConvertFun) end)
-            )
+        fun RegisterConverter(Args = {symbol, Symbol, convert_fun, ConvertFun}) ->
+            ConverterName = list_to_atom("From" ++ atom_to_list(Symbol)),
+            try
+                register(ConverterName, spawn(fun() -> loop(ConvertFun) end))
+            catch
+                error:badarg ->
+                    unregister(ConverterName),
+                    RegisterConverter(Args)
+            end
         end,
         ConvertersFrom
     ),
     lists:foreach(
-        fun({symbol, Symbol, convert_fun, ConvertFun}) ->
-            register(
-                list_to_atom("To" ++ atom_to_list(Symbol)),
-                spawn(fun() -> loop(ConvertFun) end)
-            )
+        fun RegisterConverter(Args = {symbol, Symbol, convert_fun, ConvertFun}) ->
+            ConverterName = list_to_atom("To" ++ atom_to_list(Symbol)),
+            try
+                register(ConverterName, spawn(fun() -> loop(ConvertFun) end))
+            catch
+                error:badarg ->
+                    unregister(ConverterName),
+                    RegisterConverter(Args)
+            end
         end,
         ConvertersTo
     ),
@@ -73,8 +81,17 @@ to_Ro(T) -> T * 21 / 40 + 7.5.
 
 loop(ConvertFun) ->
     receive
-        {from, From, temp, Temp} when is_number(Temp) ->
-            From ! {temp_converted, ConvertFun(Temp)};
+        {From, signal, convert_to, temp, Temp} when is_number(Temp) ->
+            From ! {signal, temp_converted, temp, ConvertFun(Temp)};
+        {From, signal, convert_from, to, To, temp, Temp} when is_number(Temp) ->
+            ConverterTo = whereis(list_to_atom("To" ++ atom_to_list(To))),
+            ConverterTo ! {self(), signal, convert_to, temp, ConvertFun(Temp)},
+            receive
+                {signal, temp_converted, temp, TempConverted} ->
+                    From ! {signal, temp_converted, temp, TempConverted};
+                Other ->
+                    io:format("Received unknown response: ~p~n", [Other])
+            end;
         Other ->
             io:format("Received unknown message: ~p~n", [Other])
     end,
