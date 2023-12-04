@@ -52,6 +52,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `nl(modulename)`
 - **Description**: Load the given module on all nodes in the distributed system. Note: the module must be compiled first using `c(modulename)`.
 
+## Monitoring a Process
+
+- **Command**: `monitor(process, Pid)`
+- **Description**: Monitor the given process in an unidirectional manner. This allows the client process to receive an exit signal if the monitored process terminates. Since links are bidirectional, this is useful if you only want to receive an exit signal from the monitored process without having to set the client process as a system process every time. If B dies and A is monitoring B, A will receive an exit signal, but B will not; if A dies, B will not receive an exit signal. The exit signal can be handled using `receive {'DOWN', Ref, process, Pid, Reason} -> ... end` where `Ref` is the reference returned by `erlang:monitor`, `Pid` is the PID of the monitored process, and `Reason` is the exit reason.
+
 ## Pinging a Node
 
 - **Command**: `net_adm:ping(nodename)`
