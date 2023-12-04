@@ -37,6 +37,11 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `try ... catch [error:Reason | exit:Reason | throw:Reason] -> ... end`
 - **Description**: Handle an exception. The `Reason` is the exception reason. Note that the catch clause behaves like a pattern match, so it can be used to handle different types of exceptions.
 
+## Linking to a Process
+
+- **Command**: `link(Pid)`
+- **Description**: Link the client process to the given process. This allows the client process to receive an exit signal if the linked process terminates. Note that the client process must be set as a system process to handle the exit signal without terminating.
+
 ## Loading a Module on All Nodes
 
 - **Command**: `nl(modulename)`
@@ -87,7 +92,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `erl -sname nodename`
 - **Description**: Start an Erlang shell on a given node. Note that the client shell must also be started with the `-sname` flag, or the nodes won't be visible to it.
 
-## Unlinking a Process
+## Unlinking from a Process
 
 - **Command**: `unlink(Pid)`
 - **Description**: Unlink the client process from the given process. This allows the client process to no longer receive an exit signal if the linked process terminates.
