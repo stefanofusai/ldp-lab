@@ -7,7 +7,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `is_process_alive(Pid)`
 - **Description**: Check if the given process is alive.
 
-## Define a Macro
+## Defining a Macro
 
 - **Command**: `-define(Macro, Value)`
 - **Description**: Define a macro with the given value. Macros are replaced at compile time. Example of a macro which sums two numbers: `-define(SUM(X, Y), X + Y).`; to use the macro, call `?SUM(1, 2)`.
@@ -67,7 +67,7 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `net_adm:ping(nodename)`
 - **Description**: Ping the given node to make it visible to the client.
 
-## Raise an Exit Signal
+## Raising an Exit Signal
 
 - **Command**: `exit(Pid, Reason)`
 - **Description**: Raise an exit signal to the given process with the given reason.
