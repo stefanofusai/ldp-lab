@@ -47,11 +47,6 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 - **Command**: `try ... catch [error:Reason | exit:Reason | throw:Reason] -> ... end`
 - **Description**: Handle an exception. The `Reason` is the exception reason. Note that the catch clause behaves like a pattern match, so it can be used to handle different types of exceptions.
 
-## Linking to a Process
-
-- **Command**: `link(Pid)`
-- **Description**: Link the client process to the given process. This allows the client process to receive an exit signal if the linked process terminates. Note that the client process must be set as a system process to handle the exit signal without terminating.
-
 ## Loading a Module on All Nodes
 
 - **Command**: `nl(modulename)`
@@ -90,31 +85,31 @@ This cheat sheet provides a quick reference to common Erlang commands and functi
 ## Setting a Process as a System Process
 
 - **Command**: `process_flag(trap_exit, true)`
-- **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating as it receives the signal in its mailbox. The signal can be handled using `receive {'EXIT', Pid, Reason} -> ... end`.
+- **Description**: Set a process as a system process. This allows it to receive exit signals from other processes without terminating as it receives the signal in its mailbox. The signal can be handled using `receive {'EXIT', Pid, Reason} -> ... end` where `Pid` is the PID of the process that exited, and `Reason` is the exit reason.
 
     Examples:
 
-  - I don't care if a process I create crashes: `Pid = spawn(fun()-> ... end)`.
-  - I want to die if a process I create crashes: `Pid = spawn_link(fun()-> ... end)`.
+  - I don't care if a process I create crashes: `Pid = spawn(fun() -> ... end)`.
+  - I want to die if a process I create crashes: `Pid = spawn_link(fun() -> ... end)`.
   - I want to handle errors if a process I create crashes:
-  `process_flag(trap_exits, true), Pid = spawn_link(fun()-> ... end)`
+  `process_flag(trap_exits, true), Pid = spawn_link(fun() -> ... end)`
 
 ## Spawning a Process on a Given Node
 
-- **Command**: `Pid = spawn(list_to_atom("nodename@" ++ HostName), module, function, [args])`
-- **Description**: Spawn a given `module:function` on a specified node. The node is determined by combining the nodename with the HostName.
+- **Command**: `Pid = spawn(node, module, function, Args)`
+- **Description**: Spawn a given `module:function` on a specified node.
 
 ## Spawning a Process and Linking to It
 
-- **Command**: `Pid = spawn_link(module, function, [args])`
-- **Description**: Spawn a given `module:function` and link to it. This allows the client process to receive an exit signal if the spawned process terminates. Note that the spawned process must be set as a system process to handle the exit signal without terminating.
+- **Command**: `Pid = spawn_link(module, function, Args)`
+- **Description**: Spawn a given `module:function` and link to it. This allows the client process to receive an exit signal if the spawned process terminates. Note that the spawning process must be set as a system process to handle the exit signal without terminating. The signal can be handled using `receive {'EXIT', Pid, Reason} -> ... end` where `Pid` is the PID of the spawned process, and `Reason` is the exit reason.
 
 ## Starting an Erlang Shell on a Node
 
-- **Command**: `erl -sname nodename`
+- **Command**: `erl -sname name`
 - **Description**: Start an Erlang shell on a given node. Note that the client shell must also be started with the `-sname` flag, or the nodes won't be visible to it.
 
-## Unlinking from a Process
+## Unregistering a Process Globally
 
-- **Command**: `unlink(Pid)`
-- **Description**: Unlink the client process from the given process. This allows the client process to no longer receive an exit signal if the linked process terminates.
+- **Command**: `global:unregister_name(name)`
+- **Description**: Unregister a process with a given name from the global scope.
